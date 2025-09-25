@@ -27,7 +27,7 @@ pip install -r requirements.txt
 Linux
 
 ```bash
-./venv/bin/activate
+source ./venv/bin/activate
 pip install -r requirements.txt
 ```
 
@@ -44,7 +44,7 @@ Windows
 Linux
 
 ```bash
-./venv/bin/activate
+source ./venv/bin/activate
 ```
 
 ### Starting the server
