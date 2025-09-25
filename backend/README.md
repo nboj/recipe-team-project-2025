@@ -15,7 +15,7 @@ python -m venv venv
 
 #### Install required packages
 
-make sure your inside the `backend/` folder before you run:
+- make sure your inside the `backend/` folder before you run:
 
 Windows
 
@@ -33,7 +33,7 @@ pip install -r requirements.txt
 
 ### Do this everytime before you start working
 
-1. make sure your inside the `backend/` folder before you run:
+- make sure your inside the `backend/` folder before you run:
 
 Windows
 
