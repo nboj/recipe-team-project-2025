@@ -54,4 +54,5 @@ fastapi dev server.py # server.py is the python file
 ```
 
 Root `/`: [http://127.0.0.1:8000/]
+
 Our Docs `/docs`: [http://127.0.0.1:8000/docs]
