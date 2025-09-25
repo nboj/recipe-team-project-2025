@@ -18,3 +18,5 @@ npm run dev
 ```
 
 View the local server at: [http://127.0.0.1:3000]
+
+Everything that matters is located in [the app folder](./app/)
