@@ -19,10 +19,12 @@ make sure your inside the `backend/` folder before you run:
 
 ```bash
 .\venv\Scripts\activate # on windows
+pip install -r requirements.txt
 ```
 
 ```bash
 ./venv/bin/activate # on linux
+pip install -r requirements.txt
 ```
 
 ### Do this everytime before you start working
