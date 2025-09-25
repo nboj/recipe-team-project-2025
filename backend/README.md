@@ -13,12 +13,21 @@ Make sure your inside the `backend/` folder before you run:
 python -m venv venv
 ```
 
+3. Install required packages
+
+```bash
+pip install -r requirements.txt
+```
+
 ### Do this everytime before you start working
 
 1. make sure your inside the `backend/` folder before you run:
 
 ```bash
 .\venv\Scripts\activate # on windows
+```
+
+```bash
 ./venv/bin/activate # on linux
 ```
 
