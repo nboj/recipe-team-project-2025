@@ -25,7 +25,7 @@ Pages are structured like this:
 
 [app/page.tsx](./app/page.tsx) = localhost:3000/ # the first page 
 
-[app/folder/page.tsx][./app/folder/page.tsx] = localhost:3000/folder # a page that is named `folder`
+(app/folder/page.tsx)[./app/folder/page.tsx] = localhost:3000/folder # a page that is named `folder`
 
 [app/recipes/page.tsx](./app/recipes/page.tsx) = localhost:3000/recipes # a page that is named `recipes`
 
