@@ -29,4 +29,4 @@ Pages are structured like this:
 >
 > [app/recipes/page.tsx](./app/recipes/page.tsx) = `localhost:3000/recipes` # a page that is named `recipes`
 >
-> [app/recipes/\[recipe_id\]/page.tsx](./app/recipes/\[recipe_id\]/page.tsx) `localhost:3000/recipes/a_specific_recipe` # a special page that can be anything (or in this case, any recipe_id to display a page for specific recipes)
+> [app/recipes/\[recipe_id\]/page.tsx](./app/recipes/\[recipe_id\]/page.tsx) `localhost:3000/recipes/a_specific_recipe` # a special page that can be anything (or in this case, any recipe_id to display a page for specific recipes). These pages are made by surrounding the folder name with brackets: `[folder_name]`
