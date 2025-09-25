@@ -17,10 +17,14 @@ python -m venv venv
 
 make sure your inside the `backend/` folder before you run:
 
+Windows
+
 ```bash
 .\venv\Scripts\activate # on windows
 pip install -r requirements.txt
 ```
+
+Linux
 
 ```bash
 ./venv/bin/activate # on linux
@@ -31,12 +35,16 @@ pip install -r requirements.txt
 
 1. make sure your inside the `backend/` folder before you run:
 
-```bash
-.\venv\Scripts\activate # on windows
-```
+Windows
 
 ```bash
-./venv/bin/activate # on linux
+.\venv\Scripts\activate
+```
+
+Linux
+
+```bash
+./venv/bin/activate
 ```
 
 ### Starting the server
