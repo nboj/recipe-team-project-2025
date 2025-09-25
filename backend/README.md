@@ -20,14 +20,14 @@ make sure your inside the `backend/` folder before you run:
 Windows
 
 ```bash
-.\venv\Scripts\activate # on windows
+.\venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
 Linux
 
 ```bash
-./venv/bin/activate # on linux
+./venv/bin/activate
 pip install -r requirements.txt
 ```
 
