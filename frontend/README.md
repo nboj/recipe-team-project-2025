@@ -17,4 +17,4 @@ npm install
 npm run dev
 ```
 
-View the local server at: [http://localhost:3000]
+View the local server at: [http://127.0.0.1:3000]
