@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RecipeForge</title>
+
+  <!-- STEP 2–3: Base styles for layout, nav, and main content -->
+  <style>
+    /* Page base */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f8fafc;
+      color: #111827;
+    }
+    header {
+      background-color: #1f2937;
+      padding: 1rem;
+    }
+    nav a {
+      color: #f9fafb;
+      margin-right: 1rem;
+      text-decoration: none;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    main {
+      padding: 1rem;
+    }
+
+    /* STEP 5: Optional tag pill styling */
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      color: #111827;
+      font-size: 12px;
+      margin-right: 6px;
+      margin-top: 6px;
+    }
+
+    /* STEP 6: Back link hover (nice to have) */
+    #back-to-recipes { text-decoration: none; }
+    #back-to-recipes:hover { text-decoration: underline; }
+  </style>
+</head>
+
+<body>
+  <!-- STEP 2: HTML structure for header + nav -->
+  <header>
+    <nav>
+      <a href="#" id="home-link">Home</a>
+      <a href="#" id="recipes-link">Recipes</a>
+      <a href="#" id="create-link">Create Recipe</a>
+    </nav>
+  </header>
+
+  <!-- STEP 2: Main content area the JS will replace -->
+  <main id="content">
+    <h1>Welcome to Recipe Forge</h1>
+    <p>Discover and create amazing recipes.</p>
+  </main>
+
+  <!-- STEP 4–6: JavaScript at the bottom so DOM is ready -->
+  <script>
+    // STEP 5: In-memory data (can be replaced by backend later)
+    const recipes = [
+      {
+        id: 101,
+        title: "Nonna's Lasagna",
+        summary: "Layered pasta with rich meat sauce and creamy béchamel.",
+        totalTime: 150,
+        difficulty: "Hard",
+        tags: ["Italian", "Pasta", "Comfort Food"]
+      },
+      {
+        id: 102,
+        title: "Weeknight Aglio e Olio",
+        summary: "Quick spaghetti with garlic, olive oil, and chili flakes.",
+        totalTime: 20,
+        difficulty: "Easy",
+        tags: ["Italian", "Pasta", "Quick"]
+      },
+      {
+        id: 103,
+        title: "Vegan Lemon Bars",
+        summary: "Tangy lemon bars with a crumbly vegan crust.",
+        totalTime: 60,
+        difficulty: "Medium",
+        tags: ["Vegan", "Dessert", "Lemon"]
+      }
+    ];
+
+    // STEP 4: Cache DOM elements
+    const content = document.getElementById("content");
+    const homeLink = document.getElementById("home-link");
+    const recipesLink = document.getElementById("recipes-link");
+    const createLink = document.getElementById("create-link");
+
+    // STEP 5: Helper to render a list of recipes from JS data
+    // CHANGE: Titles are now clickable links with data-id (for Step 6)
+    function recipeListHTML(items) {
+      if (!items || items.length === 0) {
+        return "<p>No recipes found.</p>";
+      }
+      return `
+        <ul>
+          ${items.map(r => `
+            <li>
+              <strong>
+                <!-- STEP 6: Make title clickable + carry id -->
+                <a href="#" class="recipe-link" data-id="${r.id}">${r.title}</a>
+              </strong>
+              <div>${r.summary}</div>
+              <div>⏱ ${r.totalTime} min • ${r.difficulty}</div>
+              <div>${r.tags.map(t => `<span class="tag">${t}</span>`).join(" ")}</div>
+            </li>
+          `).join("")}
+        </ul>
+      `;
+    }
+
+    // STEP 4: Core view renderer (home/recipes/create)
+    function render(view) {
+      if (view === "home") {
+        content.innerHTML = `
+          <h1>Welcome to RecipeForge</h1>
+          <p>Discover and create amazing recipes.</p>
+        `;
+      }
+
+      if (view === "recipes") {
+        // CHANGE (Step 5): Use recipeListHTML(recipes) instead of hardcoded <ul>
+        content.innerHTML = `
+          <h1>Recipes</h1>
+          <p>Below is generated from a JavaScript array.</p>
+          ${recipeListHTML(recipes)}
+        `;
+      }
+
+      if (view === "create") {
+        content.innerHTML = `
+          <h1>Create Recipe</h1>
+          <p>We’ll wire this form up next.</p>
+          <form>
+            <label>Title</label><br/>
+            <input placeholder="e.g., Spicy Peanut Noodles"/><br/><br/>
+            <button disabled>Save (not wired yet)</button>
+          </form>
+        `;
+      }
+    }
+
+    // STEP 6: Single recipe detail renderer
+    function renderRecipeDetail(id) {
+      const r = recipes.find(x => x.id === Number(id));
+      if (!r) {
+        content.innerHTML = `<p>Recipe not found.</p>`;
+        return;
+      }
+
+      content.innerHTML = `
+        <p><a href="#" id="back-to-recipes">← Back to recipes</a></p>
+        <h1>${r.title}</h1>
+        <p>${r.summary}</p>
+        <p><strong>Time:</strong> ${r.totalTime} min • <strong>Difficulty:</strong> ${r.difficulty}</p>
+        <p>${r.tags.map(t => `<span class="tag">${t}</span>`).join(" ")}</p>
+      `;
+    }
+
+    // STEP 4: Top nav click handlers
+    homeLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      render("home");
+    });
+    recipesLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      render("recipes");
+    });
+    createLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      render("create");
+    });
+
+    // STEP 6: Event delegation for dynamic content in <main>
+    // - Clicking a recipe title opens its detail view
+    // - Clicking the back link returns to list
+    content.addEventListener("click", (e) => {
+      const link = e.target.closest(".recipe-link");
+      if (link) {
+        e.preventDefault();
+        renderRecipeDetail(link.dataset.id);
+        return;
+      }
+      if (e.target.id === "back-to-recipes") {
+        e.preventDefault();
+        render("recipes");
+      }
+    });
+
+    // STEP 4: Initial render
+    render("home");
+  </script>
+</body>
+</html>
