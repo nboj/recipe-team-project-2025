@@ -1,7 +1,11 @@
+import Section from "./_components/Section";
+
 export default function Home() {
-  return (
-    <main>
-      <h1>Hello, World</h1>
-    </main>
-  );
+    return (
+        <main>
+            <Section title="Welcome to RecipeForge">
+                <p>Discover and create amazing recipes.</p>
+            </Section>
+        </main>
+    );
 }
