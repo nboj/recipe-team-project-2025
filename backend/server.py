@@ -1,24 +1,14 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
-from typing import Union
+from database.db import Base, engine 
+from routers import recipes 
 
-app = FastAPI()
+Base.metadata.create_all(bind=engine)
 
+app = FastAPI(title="Recipe_DB API")
+
+app.include_router(recipes.router)
 
 @app.get("/")
 def root():
-    return {"Hello": "World"}
+    return {"message": "Welcome to the Recipe_DB API"}
 
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
-
-
-class Item(BaseModel):
-    item: int
-
-
-@app.post("/test/create-row")
-def create_row(item: Item):
-    return {"test": item}
