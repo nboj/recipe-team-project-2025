@@ -18,5 +18,8 @@ async def get_conn():
     """
     FastAPI dependency: yields a connection from the pool.
     """
+    if not pool._opened:
+        await pool.open()
+
     async with pool.connection() as conn:
         yield conn
