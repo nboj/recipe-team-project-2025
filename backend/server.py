@@ -1,14 +1,21 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
-from database.db import Base, engine 
+from lib.db import pool
 from routers import recipes 
 
-Base.metadata.create_all(bind=engine)
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    await pool.open()
+    try:
+        yield
+    finally:
+        await pool.close()
 
-app = FastAPI(title="Recipe_DB API")
-
+app = FastAPI(title="Recipe_DB API", lifespan=lifespan)
 app.include_router(recipes.router)
 
 @app.get("/")
 def root():
     return {"message": "Welcome to the Recipe_DB API"}
+
 

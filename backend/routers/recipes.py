@@ -1,24 +1,50 @@
-from fastapi import APIRouter, Depends, HTTPException 
-from sqlalchemy.orm import Session
-from database import db, models, schema 
+from fastapi import APIRouter, Depends
+from psycopg import AsyncConnection
+from lib.auth import get_current_user
+from lib.db import get_conn
+from database import schema
 
 router = APIRouter(prefix="/recipes", tags=["recipes"])
 
-def get_db():
-    db_conn = db.SessionLocal()
-    try:
-        yield db_conn 
-    finally:
-        db_conn.close() 
 
-@router.post("/", response_model=schema.Recipe)
-def create_recipe(recipe: schema.RecipeCreate, db: Session = Depends(get_db)):
-    db_recipe = models.Recipe(title=recipe.title, description=recipe.description)
-    db.add(db_recipe)
-    db.commit()
-    db.refresh(db_recipe)
-    return db_recipe
+@router.get("/")
+async def read_recipes(
+    conn: AsyncConnection = Depends(get_conn), _user=Depends(get_current_user)
+):
+    async with conn.cursor() as cur:
+        _ = await cur.execute("SELECT * FROM RECIPES")
+        rows = await cur.fetchall()
+        return rows
 
-@router.get("/", response_model=list[schema.Recipe])
-def read_recipes(db: Session = Depends(get_db)):
-    return db.query(models.Recipe).all()
+
+@router.get("/{recipe_id}")
+async def read_recipe(
+    recipe_id: str,
+    conn: AsyncConnection = Depends(get_conn),
+    _user=Depends(get_current_user),
+):
+    async with conn.cursor() as cur:
+        _ = await cur.execute(
+            """
+            SELECT * FROM RECIPES
+            WHERE id = %s
+        """,
+            [recipe_id],
+        )
+        return await cur.fetchone()
+
+
+@router.post("/")
+async def post_recipe(
+    recipe: schema.RecipeBase,
+    conn: AsyncConnection = Depends(get_conn),
+    user=Depends(get_current_user),
+):
+    async with conn.cursor() as cur:
+        _ = await cur.execute(
+            f"""
+            INSERT INTO recipes (title, description, cook_time, created_by)
+            VALUES(%s, %s, %s, %s)
+        """,
+            [recipe.title, recipe.description, recipe.cook_time, user["sub"]],
+        )
