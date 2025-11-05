@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
+import { StackProvider, StackTheme } from "@stackframe/stack";
+import { stackClientApp } from "../stack/client";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "./_components/Providers";
 import Link from "next/link";
+import Navbar from "./_components/Navbar";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -32,16 +35,14 @@ export default function RootLayout({
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
-                <nav className="bg-slate-900 text-slate-50">
-                    <div className="max-w-5xl mx-auto px-6 py-4 flex items-center gap-6">
-                        <span className="font-bold tracking-wide">RecipeForge</span>
-                        <Link href="/" className="hover:underline">Home</Link>
-                        <Link href="/recipes" className="hover:underline">Recipes</Link>
-                        <Link href="/create" className="hover:underline">Create</Link>
-                    </div>
-                </nav>
-
-                <Providers>{children}</Providers>
+                <StackProvider app={stackClientApp}>
+                    <StackTheme>
+                        <Providers>
+                            <Navbar />
+                            {children}
+                        </Providers>
+                    </StackTheme>
+                </StackProvider>
             </body>
         </html>
     );
