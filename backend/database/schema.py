@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from typing import Annotated
 from uuid import UUID
 
 from pydantic import BaseModel, Field
