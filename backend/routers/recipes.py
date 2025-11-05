@@ -12,7 +12,7 @@ async def read_recipes(
     conn: AsyncConnection = Depends(get_conn), _user=Depends(get_current_user)
 ):
     async with conn.cursor() as cur:
-        _ = await cur.execute("SELECT * FROM RECIPES")
+        _ = await cur.execute("SELECT * FROM recipes")
         rows = await cur.fetchall()
         return rows
 
