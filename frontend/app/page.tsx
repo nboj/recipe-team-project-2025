@@ -1,7 +1,8 @@
 export default function Home() {
   return (
     <main>
-      <h1>Hello, World</h1>
+      <h1>Recipe Forge</h1>
     </main>
   );
 }
+
