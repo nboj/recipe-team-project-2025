@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import type { Recipe } from "../_types/recipe";
+import { Button } from "@heroui/react";
 
 type Props = { slides: Recipe[]; autoPlayMs?: number };
 
@@ -44,12 +45,12 @@ export default function HeroBanner({ slides, autoPlayMs = 4500 }: Props) {
                   </p>
                 )}
                 <div className="mt-5 flex gap-3">
-                  <button className="bg-white text-black rounded-lg px-4 py-2 font-medium">
+                  <Button color="primary">
                     View Recipe
-                  </button>
-                  <button className="bg-white/20 hover:bg-white/30 text-white backdrop-blur rounded-lg px-4 py-2 font-medium">
+                  </Button>
+                  <Button>
                     Add to Favorites
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>

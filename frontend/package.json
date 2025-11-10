@@ -11,9 +11,12 @@
   },
   "dependencies": {
     "@heroui/react": "^2.8.5",
+    "@stackframe/stack": "^2.8.48",
+    "babel-plugin-react-compiler": "^1.0.0",
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.23.24",
     "next": "16.0.1",
+    "postgres": "^3.4.7",
     "react": "19.2.0",
     "react-dom": "19.2.0"
   },
@@ -21,11 +24,16 @@
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "15.5.4",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "@tailwindcss/postcss": "^4",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "eslint": "^9",
+    "eslint-config-next": "16.0.1",
+    "@eslint/eslintrc": "^3"
+  },
+  "overrides": {
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2"
   }
 }

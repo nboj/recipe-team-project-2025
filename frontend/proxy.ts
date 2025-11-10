@@ -5,7 +5,6 @@ import { stackServerApp } from "./stack/server";
 // This function can be marked `async` if using `await` inside
 export async function proxy(request: NextRequest) {
     const user = await stackServerApp.getUser();
-    console.log(user, stackServerApp.urls.signUp);
     const inAuth =
         request.nextUrl.pathname == stackServerApp.urls.signUp ||
         request.nextUrl.pathname == stackServerApp.urls.signIn;
@@ -24,5 +23,5 @@ export async function proxy(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-    matcher: "/((?!_next/static|_next/image|.*\\.png$).*)",
+    matcher: "/((?!_next/static|_next/image|.*\\.png$|handler/.*).*)",
 };

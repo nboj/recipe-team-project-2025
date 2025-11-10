@@ -1,5 +1,10 @@
 fastapi[standard]
+python-dotenv
+python-jose[cryptography]
+httpx
+psycopg[binary]
+psycopg[pool]
+
 sqlalchemy
 pydantic
 python-dotenv
-uvicorn

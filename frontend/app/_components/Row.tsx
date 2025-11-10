@@ -5,6 +5,7 @@ import React, { useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import type { Recipe } from "../_types/recipe";
+import { Button } from "@heroui/react";
 
 type Props = { title: string; items: Recipe[] };
 
@@ -24,13 +25,15 @@ export default function Row({ title, items }: Props) {
       </div>
 
       <div className="relative group">
-        <button
+
+        <Button
           onClick={prev}
-          className="absolute left-0 z-10 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition bg-slate-900/70 hover:bg-slate-900/90 text-white rounded-full w-10 h-10 grid place-content-center"
+          className="absolute left-0 z-10 top-1/2 -translate-y-1/2 rounded-full opacity-0 group-hover:opacity-100"
           aria-label="Scroll left"
+          isIconOnly
         >
           ‹
-        </button>
+        </Button>
 
         <div className="overflow-hidden" ref={emblaRef}>
           <ul className="flex gap-4">
@@ -62,13 +65,14 @@ export default function Row({ title, items }: Props) {
           </ul>
         </div>
 
-        <button
+        <Button
           onClick={next}
-          className="absolute right-0 z-10 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition bg-slate-900/70 hover:bg-slate-900/90 text-white rounded-full w-10 h-10 grid place-content-center"
+          className="absolute right-0 z-10 top-1/2 -translate-y-1/2 rounded-full opacity-0 group-hover:opacity-100"
           aria-label="Scroll right"
+          isIconOnly
         >
           ›
-        </button>
+        </Button>
       </div>
     </section>
   );

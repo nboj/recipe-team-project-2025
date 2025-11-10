@@ -1,7 +1,7 @@
 import Section from "@/app/_components/Section";
-import { initialRecipes } from "../../_lib/types";
-import Tag from "@/app/_components/Tag";
 import Link from "next/link";
+import { stackServerApp } from "@/stack/server";
+import { redirect } from "next/navigation";
 
 const BackLink = () => {
     return (
@@ -20,19 +20,32 @@ interface Props {
 
 export default async function Recipe({ params }: Props) {
     const id = (await params).recipe_id;
-    const recipe = initialRecipes.find((recipe) => recipe.id == id) ?? null;
+    const app = stackServerApp
+    const user = await app.getUser()
+    if (!user) {
+        redirect(app.urls.signIn)
+    }
+
+    const { accessToken } = await user.getAuthJson()
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND!}/recipes/${id}`, {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    })
+
+    const recipe = await res.json()
+    console.log(recipe)
+
     if (recipe) {
         return (
             <Section title={recipe.title}>
                 <BackLink />
                 <div className="text-sm">
-                    ⏱ {recipe.totalTime} min • {recipe.difficulty}
+                    ⏱ {recipe.cook_time} min
                 </div>
-                <p className="mt-2">{recipe.summary}</p>
+                <p className="mt-2">{recipe.description}</p>
                 <div className="mt-2">
-                    {recipe.tags.map((t) => (
-                        <Tag key={t}>{t}</Tag>
-                    ))}
                 </div>
             </Section>
         );
