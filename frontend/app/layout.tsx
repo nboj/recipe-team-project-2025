@@ -4,7 +4,6 @@ import { stackClientApp } from "../stack/client";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "./_components/Providers";
-import Link from "next/link";
 import Navbar from "./_components/Navbar";
 
 const geistSans = Geist({
@@ -30,10 +29,10 @@ export default function RootLayout({
     return (
         <html
             lang="en"
-            className="min-h-screen bg-slate-50 text-gray-900 light text-foreground bg-background"
+            className="h-full bg-slate-50 text-gray-900 light text-foreground bg-background"
         >
             <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+                className={`h-full ${geistSans.variable} ${geistMono.variable} antialiased`}
             >
                 <StackProvider app={stackClientApp}>
                     <StackTheme>

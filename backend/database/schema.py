@@ -14,3 +14,14 @@ class RecipeRead(RecipeBase):
     created_at: datetime
     updated_at: datetime
     created_by: str
+
+
+class ReviewBase(BaseModel):
+    comment: str
+    rating: float
+
+class ReviewRead(ReviewBase):
+    recipe_id: UUID
+    user_id: str
+    comment: str
+    rating: float

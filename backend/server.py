@@ -1,11 +1,25 @@
 from fastapi import FastAPI
-from routers import recipes 
+from routers import recipes, reviews
+from fastapi.middleware.cors import CORSMiddleware
+
+origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    # add any other front-end origins you use
+]
 
 app = FastAPI(title="Recipe_DB API")
 app.include_router(recipes.router)
+app.include_router(reviews.router)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],  # important: includes OPTIONS
+    allow_headers=["*"],
+)
+
 
 @app.get("/")
 def root():
     return {"message": "Welcome to the Recipe_DB API"}
-
-

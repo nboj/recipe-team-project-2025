@@ -1,0 +1,40 @@
+.reviews {
+    display: flex;
+    flex-direction: column;
+}
+
+.user_profile {
+    width: 2rem;
+    height: 2rem;
+    position: relative;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+}
+
+.review_container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+}
+
+.review_content {
+    width: 100%;
+}
+
+.review_name {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.reviews_title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    margin-top: 3rem;
+}
