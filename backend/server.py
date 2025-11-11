@@ -5,10 +5,10 @@ from fastapi.middleware.cors import CORSMiddleware
 origins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-    "https://recipe-team-project-2025-ousq-git-christian-nbojs-projects.vercel.app",
-    "https://recipe-team-project-2025-backend.vercel.app",
-    "https://recipe-team-project-2025-ousq-git-karl-nbojs-projects.vercel.app",
-    "https://recipe-team-project-2025-ousq-git-shaemon-nbojs-projects.vercel.app",
+    "https://recipe-team-project-2025.vercel.app/",
+    "https://recipe-team-project-2025-git-christian-nbojs-projects.vercel.app/",
+    "https://recipe-team-project-2025-git-karl-nbojs-projects.vercel.app/",
+    "https://vercel.com/nbojs-projects/recipe-team-project-2025/CJu42zeEiptquyqRAm39nsRW1s4H",
     # add any other front-end origins you use
 ]
 
