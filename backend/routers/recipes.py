@@ -12,7 +12,21 @@ async def read_recipes(
     conn: AsyncConnection = Depends(get_conn), _user=Depends(get_current_user)
 ):
     async with conn.cursor() as cur:
-        _ = await cur.execute("SELECT * FROM recipes")
+        _ = await cur.execute(
+            """
+            SELECT 
+                id,
+                title,
+                description,
+                created_at,
+                updated_at,
+                created_by,
+                cook_time,
+                image,
+                (select avg(rating) from reviews where id=reviews.recipe_id ) as rating
+             FROM recipes
+         """
+        )
         rows = await cur.fetchall()
         return rows
 
@@ -26,7 +40,17 @@ async def read_recipe(
     async with conn.cursor() as cur:
         _ = await cur.execute(
             """
-            SELECT * FROM RECIPES
+            SELECT 
+                id,
+                title,
+                description,
+                created_at,
+                updated_at,
+                created_by,
+                cook_time,
+                image,
+                (select avg(rating) from reviews where id=reviews.recipe_id ) as rating
+            FROM RECIPES
             WHERE id = %s
         """,
             [recipe_id],

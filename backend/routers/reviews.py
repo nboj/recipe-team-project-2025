@@ -21,6 +21,7 @@ async def read_reviews(
                 SELECT 
                     comment,
                     rating,
+                    user_id,
                     users.role,
                     users_sync.name,
                     users_sync.raw_json->>'display_name' as display_name,
