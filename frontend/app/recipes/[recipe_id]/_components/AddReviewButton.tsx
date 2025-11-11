@@ -18,8 +18,9 @@ import { revalidate } from "@/app/_actions/revalidate";
 
 interface Props {
   recipe_id: string;
+  disabled: boolean;
 }
-export default function AddReviewButton({ recipe_id }: Props) {
+export default function AddReviewButton({ recipe_id, disabled }: Props) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
@@ -65,9 +66,10 @@ export default function AddReviewButton({ recipe_id }: Props) {
     }
     setLoading(false);
   };
+  console.log(disabled)
   return (
     <>
-      <Button color="primary" onPress={onOpen}>
+      <Button color="primary" isDisabled={disabled} onPress={onOpen}>
         Add Review
       </Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>

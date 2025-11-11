@@ -43,7 +43,7 @@ export default async function RecipePage({ params }: Props) {
 
   if (recipe) {
     return (
-      <main className="bg-slate-900 text-slate-100 h-full">
+      <main className="bg-slate-900 text-slate-100 min-h-full">
         <div className="relative">
           <div className="relative w-full">
             <div className="relative h-[60vh] w-full">

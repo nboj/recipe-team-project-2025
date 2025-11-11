@@ -5,6 +5,7 @@ import { stackServerApp } from "@/stack/server";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import styles from "./page.module.css";
+import Rating from "../_components/Rating";
 
 export default async function Recipes() {
   const app = stackServerApp;
@@ -44,7 +45,7 @@ export default async function Recipes() {
               </div>
               <div className="text-sm mt-1">{recipe.description}</div>
               <div className="text-sm mt-1">⏱ {recipe.cook_time/60} min</div>
-              <div className="mt-2"></div>
+              <Rating name="rating" rating={recipe.rating} className="color-black" />
             </div>
             <div className={styles.image_container}>
               <Image src={recipe.image} alt="pizza" fill />
