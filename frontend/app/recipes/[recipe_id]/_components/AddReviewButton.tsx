@@ -30,8 +30,9 @@ export default function AddReviewButton({ recipe_id, disabled }: Props) {
   ) => {
     e.preventDefault();
     setLoading(true);
-    let comment = e.currentTarget.elements.namedItem("comment")?.value;
-    let rating = e.currentTarget.elements.namedItem("rating")?.value;
+    const formData = new FormData(e.currentTarget);
+    let comment = formData.get("comment");
+    let rating = formData.get("rating");
     console.log(comment, rating);
     const user = await stackClientApp.getUser();
     if (!user) {
