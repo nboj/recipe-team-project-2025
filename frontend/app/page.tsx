@@ -1,6 +1,12 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 
+//new imports for the schema renderer + fetcher
+import SchemaRenderer from "./_components/SchemaRenderer";
+import { getPageSchema } from "./_lib/api";
+import type { PageSchema } from "./_types/pageSchema";
+
+// --- local demo data (unchanged) ---
 const _recipes = [
   { id: 1, title: "title goes here", description: "description here" },
   { id: 2, title: "Recipe #2", description: "tasty noodles" },
@@ -8,28 +14,18 @@ const _recipes = [
   { id: 4, title: "Pumpkin Pie", description: "pumpkins" },
 ];
 
-// frontend/app/_types/pageSchema.ts
-export type SectionBlock =
-  | { type: "hero"; title?: string; subtitle?: string }
-  | { type: "row"; title?: string; items?: Array<{ id: number; title: string; description?: string }> }
-  | { type: "text"; markdown?: string };
-
-export interface PageSchema {
-  sections: SectionBlock[]; // blanks allowed
-}
-
-// frontend/app/_lib/sectionUtils.ts
-export function isEmptySection(s: SectionBlock) {
-  if (s.type === "hero") return !s.title && !s.subtitle;
-  if (s.type === "row") return !s.title && !(s.items?.length);
-  if (s.type === "text") return !s.markdown;
-  return true;
-}
-
-
 export default function Home() {
+  // your existing state
   const [variable, setVariable] = useState<number>(0);
   const [recipes, setRecipes] = useState(_recipes);
+
+  //state for schema
+  const [schema, setSchema] = useState<PageSchema | null>(null);
+
+  //fetch the schema (from mock route now / real backend later)
+  useEffect(() => {
+    getPageSchema().then(setSchema).catch(() => setSchema(null));
+  }, []);
 
   const increaseNumber = () => setVariable((previous) => previous + 1);
   const decreaseNumber = () => setVariable((previous) => previous - 1);
@@ -92,14 +88,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Recipes section */}
+      {/*schema-driven blocks (skips blanks automatically) */}
+      {schema && <SchemaRenderer schema={schema} />}
+
+      {/* Recipes section (your existing demo list) */}
       <section className="mx-auto max-w-6xl px-4 py-12">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-2xl font-semibold">Recipes</h2>
           <span className="text-xs text-slate-400">{recipes.length} item(s)</span>
         </div>
 
-        {/* Empty state looks nice (no harsh white) */}
         {isEmpty ? (
           <div className="rounded-2xl border border-slate-800/60 bg-slate-900/40 p-10 text-center shadow-sm">
             <h3 className="mb-2 text-lg font-medium">No recipes yet</h3>
@@ -180,10 +178,9 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t border-slate-800/60">
         <div className="mx-auto max-w-6xl px-4 py-10 text-sm text-slate-400">
-          {new Date().getFullYear()} Recipe Forge • UI flared, data wires later
+           {new Date().getFullYear()} Recipe Forge • UI flared, data wires later
         </div>
       </footer>
     </main>
   );
 }
-
