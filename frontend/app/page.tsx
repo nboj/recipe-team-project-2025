@@ -8,6 +8,25 @@ const _recipes = [
   { id: 4, title: "Pumpkin Pie", description: "pumpkins" },
 ];
 
+// frontend/app/_types/pageSchema.ts
+export type SectionBlock =
+  | { type: "hero"; title?: string; subtitle?: string }
+  | { type: "row"; title?: string; items?: Array<{ id: number; title: string; description?: string }> }
+  | { type: "text"; markdown?: string };
+
+export interface PageSchema {
+  sections: SectionBlock[]; // blanks allowed
+}
+
+// frontend/app/_lib/sectionUtils.ts
+export function isEmptySection(s: SectionBlock) {
+  if (s.type === "hero") return !s.title && !s.subtitle;
+  if (s.type === "row") return !s.title && !(s.items?.length);
+  if (s.type === "text") return !s.markdown;
+  return true;
+}
+
+
 export default function Home() {
   const [variable, setVariable] = useState<number>(0);
   const [recipes, setRecipes] = useState(_recipes);
