@@ -15,6 +15,17 @@ class RecipeRead(RecipeBase):
     updated_at: datetime
     created_by: str
 
+
+class ReviewBase(BaseModel):
+    comment: str
+    rating: float
+
+class ReviewRead(ReviewBase):
+    recipe_id: UUID
+    user_id: str
+    comment: str
+    rating: float
+
 class RecipeCreate(BaseModel):
     title: Optional[str] = None 
     description: Optional[str] = None

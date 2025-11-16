@@ -7,10 +7,12 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
+      { hostname: "j3xkmzh2scw7vl7m.public.blob.vercel-storage.com" },
+      { hostname: "lh3.googleusercontent.com" },
+      { hostname: "avatars.githubusercontent.com" }
     ],
   },
 
-  // ⭐ Add this block:
   async rewrites() {
     return [
       {
