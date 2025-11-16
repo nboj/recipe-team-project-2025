@@ -38,11 +38,9 @@ export default function CreateRecipePage() {
     if (imageFile) data.append("image", imageFile);
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/recipes/", {
+      const res = await fetch("/api/recipes/", {
         method: "POST",
         body: data,
-        credentials: "include", // if using cookie-based auth
-        // headers: { Authorization: "Bearer " + token }, // if using JWT
       });
 
       if (res.ok) {
