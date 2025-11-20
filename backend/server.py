@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from lib.db import pool
-from routers import recipes, requests, reviews
+from routers import recipes, reviews, requests
 from fastapi.middleware.cors import CORSMiddleware
 
 origins = [
