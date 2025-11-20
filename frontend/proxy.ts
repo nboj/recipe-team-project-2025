@@ -4,20 +4,20 @@ import { stackServerApp } from "./stack/server";
 
 // This function can be marked `async` if using `await` inside
 export async function proxy(request: NextRequest) {
-    //const user = await stackServerApp.getUser();
-    //const inAuth = request.nextUrl.pathname.startsWith("/handler");
-    //if (user && inAuth) {
-    //    return NextResponse.redirect(new URL("/", request.url));
-    //} else if (!user && inAuth) {
-    //    return NextResponse.next();
-    //} else if (!user) {
-    //    return NextResponse.redirect(
-    //        new URL(stackServerApp.urls.signIn, request.url),
-    //    );
-    //} else {
-    //    return NextResponse.next();
-    //}
-    return NextResponse.next();
+    const user = await stackServerApp.getUser();
+    const inAuth = request.nextUrl.pathname.startsWith("/handler");
+    if (user && inAuth) {
+        return NextResponse.redirect(new URL("/", request.url));
+    } else if (!user && inAuth) {
+        return NextResponse.next();
+    } else if (!user) {
+        return NextResponse.redirect(
+            new URL(stackServerApp.urls.signIn, request.url),
+        );
+    } else {
+        return NextResponse.next();
+    }
+    //return NextResponse.next();
 }
 
 // See "Matching Paths" below to learn more

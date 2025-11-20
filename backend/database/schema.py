@@ -25,3 +25,13 @@ class ReviewRead(ReviewBase):
     user_id: str
     comment: str
     rating: float
+
+class RequestBase(BaseModel):
+    message: str
+    type: str
+
+class RequestRead(RequestBase):
+    id: str
+    user_id: str
+    status: str
+    created_at: datetime

@@ -1,0 +1,46 @@
+import { stackServerApp } from "@/stack/server";
+import styles from "./page.module.css";
+import { redirect } from "next/navigation";
+
+export default async function Admin() {
+  const app = stackServerApp;
+
+  const user = await app.getUser();
+  if (!user) {
+    redirect(app.urls.signIn);
+  }
+  const { accessToken } = await user.getAuthJson();
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND!}/requests`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  let requests = await res.json();
+
+  if (!res.ok) {
+    //redirect("/");
+    console.error(requests);
+    return <>Error fetching data</>;
+  }
+
+  console.log(requests)
+
+  return (
+    <main className={styles.main}>
+      <div className={styles.inner_main}>
+        <h2 className={styles.title}>Admin Dashboard</h2>
+        <div className={styles.requests_container}>
+          {
+            requests.map((request: any, index: number) => {
+              return (
+                <div key={`request-${index}`}>{request.type} - {request.message}</div>
+              )
+            })
+          }
+        </div>
+      </div>
+    </main>
+  );
+}

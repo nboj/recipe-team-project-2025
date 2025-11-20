@@ -23,7 +23,12 @@ export default async function Recipes() {
     },
   });
 
-  const recipes = await res.json();
+  if (!res.ok) {
+    console.error(res)
+    return <>Error fetching data</>
+  }
+
+  let recipes = await res.json();
 
   return (
     <Section title="Recipes">
