@@ -10,6 +10,7 @@ type Recipe = {
   id: number;
   title: string;
   description: string;
+  cook_time: number;
   image?: string | null;
 };
 
@@ -445,7 +446,7 @@ export default function Home() {
                         Easy
                       </span>
                       <span className="rounded-full border border-slate-700/70 px-2 py-0.5 text-[10px] uppercase tracking-wide text-slate-300">
-                        20 min
+                          {recipe.cook_time/60} min
                       </span>
                     </div>
                     <button
