@@ -104,14 +104,16 @@ export default function Home() {
 
 
   // ---- Handlers ----
-  const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    fetchRecipes({ q: search });
+    let recipes = await fetchRecipes({ q: search });
+    setRecipes(recipes)
   };
 
-  const clearSearch = () => {
+  const clearSearch = async () => {
     setSearch("");
-    fetchRecipes();
+    let recipes = await fetchRecipes();
+    setRecipes(recipes);
   };
 
   const handleForm = async (event: React.FormEvent<HTMLFormElement>) => {
