@@ -1,3 +1,4 @@
+from typing import Any
 from fastapi import APIRouter, Depends
 from psycopg import AsyncConnection
 from lib.auth import get_current_user
@@ -9,11 +10,14 @@ router = APIRouter(prefix="/recipes", tags=["recipes"])
 
 @router.get("/")
 async def read_recipes(
+    q: str | None = None,
+    sort_by: str | None = None,
+    limit: int | None = None,
+    descending: bool | None = None,
     conn: AsyncConnection = Depends(get_conn), _user=Depends(get_current_user)
 ):
     async with conn.cursor() as cur:
-        _ = await cur.execute(
-            """
+        base = """
             SELECT 
                 id,
                 title,
@@ -26,7 +30,34 @@ async def read_recipes(
                 (select avg(rating) from reviews where id=reviews.recipe_id ) as rating
              FROM recipes
          """
-        )
+        conditions: list[str] = []
+        params: list[str] = []
+        if q:
+            conditions.append("(title ILIKE %s OR description ILIKE %s)")
+            like = f"%{q}%"
+            params.append(like)
+            params.append(like)
+
+        if len(conditions) > 0 and len(params) > 0:
+            base +=  " WHERE " + " AND ".join(conditions)
+
+
+        allowed_sort_columns = {"created_at", "updated_at", "cook_time", "title", "description"}
+        if sort_by in allowed_sort_columns:
+            if descending:
+                base += f" ORDER BY {sort_by} DESC "
+            else:
+                base += f" ORDER BY {sort_by} ASC "
+
+        if limit:
+            base += " LIMIT %s "
+            params.append(str(limit))
+
+        query: Any = base
+        print(query)
+        print(params)
+
+        _ = await cur.execute(query, params)
         rows = await cur.fetchall()
         return rows
 
