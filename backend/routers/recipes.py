@@ -1,9 +1,11 @@
 from typing import Any
+import uuid
 from fastapi import APIRouter, Depends
 from psycopg import AsyncConnection
 from lib.auth import get_current_user
 from lib.db import get_conn
 from database import schema
+from vercel.blob import UploadProgressEvent, BlobClient, AsyncBlobClient
 
 router = APIRouter(prefix="/recipes", tags=["recipes"])
 
@@ -14,7 +16,8 @@ async def read_recipes(
     sort_by: str | None = None,
     limit: int | None = None,
     descending: bool | None = None,
-    conn: AsyncConnection = Depends(get_conn), _user=Depends(get_current_user)
+    conn: AsyncConnection = Depends(get_conn),
+    _user=Depends(get_current_user),
 ):
     async with conn.cursor() as cur:
         base = """
@@ -39,10 +42,15 @@ async def read_recipes(
             params.append(like)
 
         if len(conditions) > 0 and len(params) > 0:
-            base +=  " WHERE " + " AND ".join(conditions)
+            base += " WHERE " + " AND ".join(conditions)
 
-
-        allowed_sort_columns = {"created_at", "updated_at", "cook_time", "title", "description"}
+        allowed_sort_columns = {
+            "created_at",
+            "updated_at",
+            "cook_time",
+            "title",
+            "description",
+        }
         if sort_by in allowed_sort_columns:
             if descending:
                 base += f" ORDER BY {sort_by} DESC "
@@ -91,15 +99,33 @@ async def read_recipe(
 
 @router.post("/")
 async def post_recipe(
-    recipe: schema.RecipeBase,
+    recipe: schema.RecipeWrite,
     conn: AsyncConnection = Depends(get_conn),
     user=Depends(get_current_user),
 ):
     async with conn.cursor() as cur:
+        image_file = recipe.image
+        client = AsyncBlobClient()
+        path = f"/{user["sub"]}/{uuid.uuid4()}/recipe.png"
+        _res = await client.put(f"{path}", image_file)
+        print(_res)
         _ = await cur.execute(
             f"""
-            INSERT INTO recipes (title, description, cook_time, created_by)
-            VALUES(%s, %s, %s, %s)
+            INSERT INTO recipes (title, description, cook_time, created_by, image)
+            VALUES(%s, %s, %s, %s, %s)
+            RETURNING id;
         """,
-            [recipe.title, recipe.description, recipe.cook_time, user["sub"]],
+            [recipe.title, recipe.description, recipe.cook_time, user["sub"], path],
         )
+
+        id: str = str(await cur.fetchone())
+        print("ID: ", id)
+
+        for step in recipe.steps:
+            _ = await cur.execute(
+                """
+                INSERT INTO steps (recipe_id, step_no, instruction_text, est_minutes)
+                VALUES (%s, %s, %s, %s);
+            """,
+                [id, step.step_no, step.instruction_text, step.est_minutes],
+            )

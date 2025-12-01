@@ -12,9 +12,9 @@ const BackLink = () => {
   return (
     <Link
       className="mt-6 inline-flex items-center gap-2 text-slate-200 hover:underline"
-      href="/recipes"
+      href="/"
     >
-      ← Back to recipes
+      ← Back
     </Link>
   );
 };

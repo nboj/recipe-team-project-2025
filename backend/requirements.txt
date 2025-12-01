@@ -8,3 +8,5 @@ psycopg[pool]
 sqlalchemy
 pydantic
 python-dotenv
+vercel
+python-multipart
