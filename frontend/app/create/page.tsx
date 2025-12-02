@@ -32,7 +32,7 @@ export default function CreateRecipePage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = new FormData(e.target as HTMLFormElement);
-    data.set("steps", JSON.stringify(steps.map(s => ({...s, est_minutes: s.minutes + s.hours*60}))))
+    data.set("steps", JSON.stringify(steps.map(s => ({...s, est_minutes: `${s.hours.toString().padStart(2, '0')}:${s.minutes.toString().padStart(2, '0')}`}))))
     data.set(
       "cook_time",
       `${Math.floor((totalDuration/60))?.toString().padStart(2, "0")}:${(totalDuration%60)?.toString().padStart(2, "0")}:00`,
@@ -153,6 +153,7 @@ export default function CreateRecipePage() {
                       labelPlacement="outside"
                       placeholder="hrs"
                       minValue={0}
+                      maxValue={59}
                       endContent={<p className="text-slate-500">hours</p>}
 // @ts-ignore
                       onChange={(e) => setSteps(old => old.map(s => s.id == step.id ? {...s, hours: isNaN(e as number) ? step.hours : e}: s))}
