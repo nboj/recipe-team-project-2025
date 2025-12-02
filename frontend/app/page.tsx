@@ -4,6 +4,7 @@ import { stackClientApp } from "@/stack/client";
 import Link from "next/link";
 import type React from "react";
 import { useState, useMemo, useEffect } from "react";
+import Rating from "./_components/Rating";
 
 // --- types & backend base URL ---
 type Recipe = {
@@ -12,6 +13,8 @@ type Recipe = {
   description: string;
   cook_time: number;
   image?: string | null;
+  rating: number;
+  difficulty: "easy" | "medium" | "hard" | "expert"
 };
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND ?? "http://localhost:8000";
@@ -151,8 +154,6 @@ export default function Home() {
     }
   };
 
-  const removeRecipe = (id: number) =>
-    setRecipes((previous) => previous.filter((item) => item.id !== id));
 
   const isEmpty = useMemo(
     () => recipes.length === 0 && !loading && !error,
@@ -418,9 +419,9 @@ export default function Home() {
               <Link
                 key={recipe.id}
                 href={`/recipes/${recipe.id}`}
-                className="group overflow-hidden rounded-2xl border border-slate-800/60 bg-slate-900/40 shadow-sm transition-transform hover:scale-[1.01] hover:shadow-md"
+                className="group overflow-hidden flex flex-col rounded-2xl border border-slate-800/60 bg-slate-900/40 shadow-sm transition-transform hover:scale-[1.01] hover:shadow-md"
               >
-                <div className="h-36 overflow-hidden bg-slate-800/60 transition group-hover:brightness-110">
+                <div className="h-36 shrink-0 overflow-hidden bg-slate-800/60 transition group-hover:brightness-110">
                   {recipe.image ? (
                     <img
                       src={recipe.image}
@@ -433,11 +434,11 @@ export default function Home() {
                     </div>
                   )}
                 </div>
-                <div className="p-4">
-                  <h5 className="mb-1 line-clamp-1 text-lg font-semibold">
+                <div className="p-4 flex h-full flex-col">
+                  <h5 className="mb-1 line-clamp-1 shrink-0 text-lg font-semibold">
                     {recipe.title}
                   </h5>
-                  <p className="line-clamp-2 text-sm text-slate-300">
+                  <p className="line-clamp-2 h-full text-sm mt-auto text-slate-300">
                     {recipe.description}
                   </p>
                   <div className="mt-4 flex items-center justify-between">
@@ -448,13 +449,8 @@ export default function Home() {
                       <span className="rounded-full border border-slate-700/70 px-2 py-0.5 text-[10px] uppercase tracking-wide text-slate-300">
                           {recipe.cook_time/60} min
                       </span>
+                      <Rating name="rating" rating={recipe.rating} className="color-black" />
                     </div>
-                    <button
-                      onClick={() => removeRecipe(recipe.id)}
-                      className="rounded-lg border border-rose-800/60 px-3 py-1.5 text-xs text-rose-200/90 hover:border-rose-500 hover:text-rose-100"
-                    >
-                      Remove
-                    </button>
                   </div>
                 </div>
               </Link>

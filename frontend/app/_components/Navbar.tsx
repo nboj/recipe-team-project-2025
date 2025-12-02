@@ -20,10 +20,11 @@ import { FaShieldAlt } from "react-icons/fa";
 interface ProfileItemProps {
     href: string;
     description: string;
+    onClose?: () => void;
 }
-const ProfileItem = ({ href, description }: ProfileItemProps) => {
+const ProfileItem = ({ href, description, onClose }: ProfileItemProps) => {
     return (
-        <HeroLink href={href} className="text-xs">
+        <HeroLink href={href} className="text-xs" onPress={onClose}>
             {description}
         </HeroLink>
     );
@@ -44,9 +45,13 @@ const Profile = ({ user, role }: ProfileProps) => {
             return <FaShieldAlt />;
         }
     }, [role]);
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const handleClose = () => {
+        setIsOpen(false);
+    }
     return (
         <>
-            <Popover>
+            <Popover isOpen={isOpen} onOpenChange={(open) => setIsOpen(open)}>
                 <Badge
                     content={badgeIcon}
                     color="primary"
@@ -81,12 +86,12 @@ const Profile = ({ user, role }: ProfileProps) => {
                         <div className={styles.popover_content}>
                             {user.primaryEmail && <p>{user.primaryEmail}</p>}
                             {canCreate ? (
-                                <ProfileItem href="/create" description="Create Recipe" />
+                                <ProfileItem href="/create" description="Create Recipe" onClose={handleClose} />
                             ) : (
-                                <ProfileItem href="/become-a-chef" description="Become a chef?" />
+                                <ProfileItem href="/become-a-chef" description="Become a chef?" onClose={handleClose} />
                             )}
                             {hasAdmin && (
-                                <ProfileItem href="/admin" description="Admin Dashboard" />
+                                <ProfileItem href="/admin" description="Admin Dashboard" onClose={handleClose} />
                             )}
                         </div>
                         <Button

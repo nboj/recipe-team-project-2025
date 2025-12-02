@@ -1,7 +1,10 @@
+from datetime import timedelta
+import json
 from typing import Any
 import uuid
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, File, Form, UploadFile
 from psycopg import AsyncConnection
+from pydantic import BaseModel
 from lib.auth import get_current_user
 from lib.db import get_conn
 from database import schema
@@ -30,7 +33,20 @@ async def read_recipes(
                 created_by,
                 cook_time,
                 image,
-                (select avg(rating) from reviews where id=reviews.recipe_id ) as rating
+                difficulty,
+                (
+                    SELECT json_agg(
+                        json_build_object(
+                            'step_no', s.step_no,
+                            'instruction_text', s.instruction_text,
+                            'est_minutes', EXTRACT(EPOCH FROM s.est_minutes)
+                        )
+                        ORDER BY s.step_no
+                    ) 
+                    FROM steps s
+                    WHERE s.recipe_id = recipes.id
+                ) AS steps,
+                (select avg(rating) from reviews where recipes.id=reviews.recipe_id ) as rating
              FROM recipes
          """
         conditions: list[str] = []
@@ -62,8 +78,6 @@ async def read_recipes(
             params.append(str(limit))
 
         query: Any = base
-        print(query)
-        print(params)
 
         _ = await cur.execute(query, params)
         rows = await cur.fetchall()
@@ -88,7 +102,20 @@ async def read_recipe(
                 created_by,
                 cook_time,
                 image,
-                (select avg(rating) from reviews where id=reviews.recipe_id ) as rating
+                difficulty,
+                (
+                    SELECT json_agg(
+                        json_build_object(
+                            'step_no', s.step_no,
+                            'instruction_text', s.instruction_text,
+                            'est_minutes', EXTRACT(EPOCH FROM s.est_minutes)
+                        )
+                        ORDER BY s.step_no
+                    ) 
+                    FROM steps s
+                    WHERE s.recipe_id = recipes.id
+                ) AS steps,
+                (select avg(rating) from reviews where recipes.id=reviews.recipe_id ) as rating
             FROM RECIPES
             WHERE id = %s
         """,
@@ -97,35 +124,45 @@ async def read_recipe(
         return await cur.fetchone()
 
 
+class StepIn(BaseModel):
+    step_no: int
+    instruction_text: str
+    est_minutes: str
+
 @router.post("/")
 async def post_recipe(
-    recipe: schema.RecipeWrite,
+    title: str = Form(),
+    description: str = Form(),
+    cook_time: timedelta = Form(),
+    image: UploadFile = File(),
+    steps: str = Form(),
     conn: AsyncConnection = Depends(get_conn),
     user=Depends(get_current_user),
 ):
     async with conn.cursor() as cur:
-        image_file = recipe.image
         client = AsyncBlobClient()
         path = f"/{user["sub"]}/{uuid.uuid4()}/recipe.png"
-        _res = await client.put(f"{path}", image_file)
-        print(_res)
+        res = await client.put(f"{path}", await image.read())
         _ = await cur.execute(
             f"""
             INSERT INTO recipes (title, description, cook_time, created_by, image)
             VALUES(%s, %s, %s, %s, %s)
             RETURNING id;
         """,
-            [recipe.title, recipe.description, recipe.cook_time, user["sub"], path],
+            [title, description, cook_time, user["sub"], res.url],
         )
 
-        id: str = str(await cur.fetchone())
-        print("ID: ", id)
+        raw_steps = json.loads(steps)
+        parsed_steps = [StepIn(**s) for s in raw_steps]
+        new_recipe: Any = await cur.fetchone()
 
-        for step in recipe.steps:
+        for step in parsed_steps:
             _ = await cur.execute(
                 """
                 INSERT INTO steps (recipe_id, step_no, instruction_text, est_minutes)
                 VALUES (%s, %s, %s, %s);
             """,
-                [id, step.step_no, step.instruction_text, step.est_minutes],
+                [new_recipe["id"], step.step_no, step.instruction_text, step.est_minutes],
             )
+
+        return {"id": new_recipe["id"]}

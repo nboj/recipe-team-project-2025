@@ -3,7 +3,7 @@ import Link from "next/link";
 import { stackServerApp } from "@/stack/server";
 import { redirect } from "next/navigation";
 import Image from "next/image";
-import { Recipe } from "@/app/_lib/types";
+import { Recipe, Step } from "@/app/_lib/types";
 import styles from "./page.module.css";
 import Rating from "../../_components/Rating";
 import Reviews from "./_components/Reviews";
@@ -39,11 +39,16 @@ export default async function RecipePage({ params }: Props) {
     },
   });
 
+  if (!res.ok) {
+    return <p>Error loading page, please try again at a later time.</p>
+  }
+
   const recipe: null | Recipe = await res.json();
+  console.log(recipe)
 
   if (recipe) {
     return (
-      <main className="bg-slate-900 text-slate-100 min-h-full">
+      <main className="bg-slate-900 text-slate-100 h-full">
         <div className="relative">
           <div className="relative w-full">
             <div className="relative h-[60vh] w-full">
@@ -78,6 +83,16 @@ export default async function RecipePage({ params }: Props) {
             <div className="text-sm">⏱ {recipe.cook_time / 60} min</div>
             <p className="mt-2">{recipe.description}</p>
             <div className="mt-2"></div>
+            <div className="flex flex-col gap-[1rem] max-w-[900px] mx-auto my-10 px-10">
+              {recipe.steps?.map((step) => {
+                return (
+                  <div key={`recipe-step-${step.step_no}`} className="flex flex-col">
+                    <p className="font-bold flex w-full justify-between items-center">Step {step.step_no}<span>{step.est_minutes/60} minutes</span></p>
+                    <p>{step.instruction_text}</p>
+                  </div>
+                )
+              })}
+            </div>
             <Reviews recipe_id={id}/>
           </div>
         </section>

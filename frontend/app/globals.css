@@ -30,3 +30,9 @@ h5 {
 h6 {
   font-size: 1.1rem;
 }
+
+html, body { 
+  height: 100%;
+  min-height: fit-content;
+  overflow: auto;
+}

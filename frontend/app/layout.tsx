@@ -29,10 +29,10 @@ export default function RootLayout({
     return (
         <html
             lang="en"
-            className="h-full bg-slate-50 text-gray-900 light text-foreground bg-background"
+            className="bg-slate-50 text-gray-900 light text-foreground bg-background"
         >
             <body
-                className={`h-full ${geistSans.variable} ${geistMono.variable} antialiased`}
+                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
                 <StackProvider app={stackClientApp}>
                     <StackTheme>

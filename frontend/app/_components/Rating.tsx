@@ -80,7 +80,7 @@ const Rating = ({
       onMouseLeave={handleMouseLeave}
       onClick={handleClick}
     >
-      {name && <input type="hidden" name={name} value={rating} />}
+      {name && <input type="hidden" name={name} value={rating ?? 0} />}
       {Array.from({ length: stars }).map((_, index) => (
         <FaStar key={`star-${index}`} />
       ))}
