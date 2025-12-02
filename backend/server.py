@@ -1,7 +1,5 @@
-from contextlib import asynccontextmanager
 from dotenv import load_dotenv
 from fastapi import FastAPI
-from lib.db import pool
 from routers import recipes, reviews, requests, users
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -21,13 +19,8 @@ origins = [
     # add any other front-end origins you use
 ]
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    await pool.open()
-    async with pool:   # opens pool at startup, closes on shutdown
-        yield
 
-app = FastAPI(title="Recipe_DB API", lifespan=lifespan)
+app = FastAPI(title="Recipe_DB API")
 app.include_router(recipes.router)
 app.include_router(reviews.router)
 app.include_router(requests.router)
