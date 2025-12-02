@@ -1,0 +1,5 @@
+.main {
+    display: inline-flex;
+    width: fit-content;
+    padding: .2rem;
+}
