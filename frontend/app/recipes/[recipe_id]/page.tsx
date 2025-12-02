@@ -83,7 +83,7 @@ export default async function RecipePage({ params }: Props) {
             <div className="text-sm">⏱ {recipe.cook_time / 60} min</div>
             <p className="mt-2">{recipe.description}</p>
             <div className="mt-2"></div>
-            <div className="flex flex-col gap-[1rem] max-w-[900px] mx-auto my-10 px-10">
+            <div className="flex flex-col gap-[2rem] mx-auto my-30 px-10">
               {recipe.steps?.map((step) => {
                 return (
                   <div key={`recipe-step-${step.step_no}`} className="flex flex-col">
