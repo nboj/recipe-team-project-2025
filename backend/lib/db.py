@@ -18,7 +18,7 @@ async def get_conn():
     """
     FastAPI dependency: yields a connection from the pool.
     """
-    conn = await AsyncConnection.connect(DATABASE_URL, row_factory=dict_row)
+    conn = await AsyncConnection.connect(DATABASE_URL, row_factory=dict_row, autocommit=True)
     try:
         yield conn
     finally:
