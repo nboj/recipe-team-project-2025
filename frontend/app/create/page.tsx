@@ -154,6 +154,7 @@ export default function CreateRecipePage() {
                       placeholder="hrs"
                       minValue={0}
                       endContent={<p className="text-slate-500">hours</p>}
+// @ts-ignore
                       onChange={(e) => setSteps(old => old.map(s => s.id == step.id ? {...s, hours: isNaN(e as number) ? step.hours : e}: s))}
                     />
                     <NumberInput
@@ -162,6 +163,7 @@ export default function CreateRecipePage() {
                       placeholder="min"
                       minValue={0}
                       endContent={<p className="text-slate-500">minutes</p>}
+// @ts-ignore
                       onChange={(e) => setSteps(old => old.map(s => s.id == step.id ? {...s, minutes: isNaN(e as number) ? step.minutes : e}: s))}
                     />
                   </div>
