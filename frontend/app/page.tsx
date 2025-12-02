@@ -245,51 +245,6 @@ export default function Home() {
         </section>
       )}
 
-      {/* Create recipe form */}
-      <section className="border-t border-slate-800/60 bg-slate-900/30">
-        <div className="mx-auto max-w-6xl px-4 py-12">
-          <h3 className="mb-4 text-xl font-medium">Create a recipe</h3>
-          <p className="mb-4 text-sm text-slate-400">
-            Use this form to add recipes directly into the backend database via{" "}
-            <code className="rounded bg-slate-800/70 px-1 py-0.5 text-[10px]">
-              POST /recipes
-            </code>
-            . New recipes will appear in the list below and will be available to
-            any homepage sections powered by the backend.
-          </p>
-          <form
-            className="grid grid-cols-1 gap-4 sm:grid-cols-5"
-            onSubmit={handleForm}
-          >
-            <input
-              name="title"
-              type="text"
-              placeholder="Title"
-              className="sm:col-span-2 rounded-xl border border-slate-700/70 bg-slate-900/60 px-3 py-2 text-sm outline-none focus:border-slate-400"
-              required
-            />
-            <input
-              name="description"
-              type="text"
-              placeholder="Description"
-              className="sm:col-span-3 rounded-xl border border-slate-700/70 bg-slate-900/60 px-3 py-2 text-sm outline-none focus:border-slate-400"
-              required
-            />
-            <input
-              name="image_url"
-              type="text"
-              placeholder="Image URL (optional, e.g. /images/new-dish.jpg)"
-              className="sm:col-span-5 rounded-xl border border-slate-700/70 bg-slate-900/60 px-3 py-2 text-sm outline-none focus:border-slate-400"
-            />
-            <div className="sm:col-span-5">
-              <button className="rounded-xl border border-slate-700/70 bg-slate-900/60 px-4 py-2 text-sm transition hover:scale-[1.01] hover:border-slate-400">
-                Save recipe
-              </button>
-            </div>
-          </form>
-        </div>
-      </section>
-
       {/* New Arrivals banner */}
       {hasRecipes && newestRecipe && (
         <section className="border-t border-slate-800/60 bg-slate-900/50">
