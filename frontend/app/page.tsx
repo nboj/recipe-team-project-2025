@@ -182,7 +182,7 @@ export default function Home() {
             <p className="text-slate-400">
               Welcome to Recipe Forge, your go-to app for crafting and managing
               delicious recipes with ease. This homepage now pulls recipe data
-              and search results from the FastAPI + SQLite backend.
+              and search results from the FastAPI + PostgreSQL backend.
             </p>
           </div>
         </div>
